@@ -1,4 +1,13 @@
-V.1
+V.1.2
+
+basically
+
+same as before except now it's wrapped with flask
+and I hide my API keys in a config file. 
+If you want to run this, get your own API key 
+or just remove the script import
+
+V.1.1
 
 basically
 team name 
