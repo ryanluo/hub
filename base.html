@@ -19,34 +19,6 @@
                 <div id="db">
                         Visualize Database:
                 </div>
-                <script>
-                        var db = new Firebase('https://hub-test.firebaseio.com')
-                        $('#addTeam').click(function (e) {
-                                var X = $('#X').val();
-                                var Y = $('#Y').val();
-                                var teamName = $('#teamName').val();
-                                var teams = {};
-                                teams = {name: teamName, loc: {x: X, y:Y}};
-                                db.child(teamName).set(teams);
-                                $('#X').val('');
-                                $('#Y').val('');
-                        })
-                        db.on('child_added', function(snapshot) {
-                                var team = snapshot.val();
-                                var loc  = team.loc
-                                displayTeam(team.name, loc.x, loc.y);
-                        });
-                        db.on('child_changed', function(snapshot) {
-                                var team = snapshot.val();
-                                var loc = team.loc;
-                                updateTeam(team.name, loc.x, loc.y);
-                        });
-                        function displayTeam(name, x, y) {
-                                $('<div id='+name+' />').text(name+": " +x+","+y).appendTo($('#db'));
-                        }
-                        function updateTeam(name, x, y) {
-                               $('#'+name).text(name+": "+x+","+y); 
-                        }
-                </script>
-        </body>
+                 <script src='draw_and_save.js'></script>
+       </body>
 </html>
