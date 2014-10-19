@@ -4,22 +4,26 @@
                 <script src='https://cdn.firebase.com/js/client/1.1.1/firebase.js'></script>
                 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
                 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{api_key}}"></script>
+                <style>
+                        #map {
+                          height: 70%;
+                          width: 50%;
+                        }
+                </style>
         </head>
         <body>
                 Add a team:
                 <form>
-                Team Name: <input type="text" id="teamName">
-                <br>
                 Location X: <input type="text" id="X">
                 <br>
                 Location Y: <input type = "text" id="Y">
                 <br>
-                <button type="button" id="addTeam">Submit</button>
                 </form>
-
+                Visualize Database:
                 <div id="db">
-                        Visualize Database:
                 </div>
-                 <script src='../static/js/draw_and_save.js'></script>
+                <div id="map"></div>
+                 <script src='{{DRAW_AND_SAVE}}'></script>
+                 <script src='{{MAP_INTERFACE}}'></script>
        </body>
 </html>

@@ -3,62 +3,57 @@
  */
 
 var db = new Firebase('https://hub-test.firebaseio.com')
+var user;
 
 /*
  * SAVE FUNCTIONS
  */
 
 /*
- * When you click submit we set the team in the dictionary
- * of one of the teams to what we have from input.
- *
- * tldr; this updates the teams location
+ * Update database on added location
  */
-$('#addTeam').click(function (e) {
-        var X = $('#X').val();
-        var Y = $('#Y').val();
-        var teamName = $('#teamName').val();
-        var teams = {};
-        teams = {name: teamName, loc: {x: X, y:Y}};
-        db.child(teamName).set(teams);
-        $('#X').val('');
-        $('#Y').val('');
-})
+function updateDatabase(pos) {
+  user = db.push(pos);
+}
+
+/*
+ * Update database on window close.
+ */ 
+window.onbeforeunload = function() {
+  user.remove();
+}
 
 /*
  * When a team is added, we display it.
  */
 db.on('child_added', function(snapshot) {
-        var team = snapshot.val();
-        var loc  = team.loc
-        displayTeam(team.name, loc.x, loc.y);
+  var team = snapshot.val();
+  var loc  = team.loc
+  var pos = {lat: loc.y, lng: loc.x};
+  var name = team.teamName;
+  var circle = drawOthers(name, pos, map);
+  others[name] = {circle: circle, team: team};
 });
 
 /*
  * When a child is updated, we display it.
  */
 db.on('child_changed', function(snapshot) {
-        var team = snapshot.val();
-        var loc = team.loc;
-        updateTeam(team.name, loc.x, loc.y);
+  var team = snapshot.val();
+  var loc = team.loc;
+  var pos = {lat: loc.y, lng: loc.x};
 });
 
 /*
- * DRAW FUNCTIONS
+ * When a child is removed, we remove it from the map.
+ *
+ * <<<<untested>>>>
+ *
  */
-
-/*
- * Display new team
- */
-function displayTeam(name, x, y) {
-        $('<div id='+name+' />')
-                .text(name+": " +x+","+y).appendTo($('#db'));
-}
-
-/*
- * Update team 
- */
-function updateTeam(name, x, y) {
-       $('#'+name).text(name+": "+x+","+y); 
-}
-
+db.on('child_removed', function(snapshot) {
+  var team = snapshot.val();
+  var name = team.teamName;
+  var circle = others[name].circle;
+  circle.setMap(null);
+  others[name] = null;
+});
