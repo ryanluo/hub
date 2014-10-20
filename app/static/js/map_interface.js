@@ -47,14 +47,21 @@ google.maps.event.addListener(infowindow,'domready', function(){
       alert("Please enter a team name!");
       return;
     }
-    updateDatabase({
-      teamName: name,
-      loc: {
-        lat: marker.position.k,
-        lng: marker.position.B
-      }
-    });
+    var pos = {
+      lat: marker.position.k,
+      lng: marker.position.B
+    }
+    
+    var data = {
+      loc: pos,
+      teamName: name
+    }
+
+    updateDatabase(data);
     infowindow.close();
+    others[name].data = data;
+    marker.content = formatContent(data);
+    activateListener(marker, name);
   });
 });
 
@@ -123,6 +130,7 @@ function drawOthers(name, pos, map) {
     strokeColor: 'black',
     strokeWeight: 1
   }
+
   // Add the circle for this city to the map.
   return (new google.maps.Marker({
     position: pos,
@@ -132,21 +140,19 @@ function drawOthers(name, pos, map) {
 }
 
 function activateListeners() {
-  for (team in others) {
-    activateListener(others, team);
+  for (teamName in others) {
+    activateListener(others[teamName].circle, teamName);
   }
 }
 
-function activateListener(others, team) {
-    var circle = others[team].circle;
-    var data = others[team].data;
-    others[team]['listener'] =
-      google.maps.event.addListener(circle, 'click', function() {
-        infowindow.close();
-        infowindow.content = this.content
-        infowindow.open(this.getMap());
-        infowindow.setPosition(data.loc);
-      }); 
+function activateListener(object, teamName) {
+  others[teamName]['listener'] =
+    google.maps.event.addListener(object, 'click', function() {
+      infowindow.close();
+      infowindow.content = this.content;
+      infowindow.open(this.getMap());
+      infowindow.setPosition(this.position);
+    }); 
 }
 
 function formatContent(teamData) {

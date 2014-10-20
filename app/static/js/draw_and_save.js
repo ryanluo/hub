@@ -34,7 +34,7 @@ db.on('child_added', function(snapshot) {
   var circle = drawOthers(name, pos, map);
   circle.content = formatContent(team);
   others[name] = {circle: circle, data: team};
-  activateListener(others, name);
+  activateListener(others[name].circle, name);
 });
 
 /*
