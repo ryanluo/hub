@@ -8,10 +8,6 @@ var db = new Firebase('https://hub-test.firebaseio.com')
 // Reference to user
 var user;
 
-// Global shared variable that stores all instances
-// of other teams we've drawn on our map.
-others;
-
 /*
  * _________________
  * | SAVE FUNCTIONS|

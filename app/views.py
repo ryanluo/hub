@@ -7,5 +7,5 @@ from flask import render_template, url_for
 def index():
   return render_template('index.html',
                          API_KEY=config.MAPS_API_KEY,
-                         DRAW_AND_SAVE = url_for('static',filename='js/draw_and_save.js'),
+                         FIREBASE_INTERFACE = url_for('static',filename='js/firebase_interface.js'),
                          MAP_INTERFACE = url_for('static',filename='js/map_interface.js'))
