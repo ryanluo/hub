@@ -1,3 +1,9 @@
+V.1.3
+
+Functional. Icons replaced with circles for 
+other teams. Real time add. Not sure about realtime delete.
+
+
 V.1.2
 
 basically
@@ -5,7 +11,8 @@ basically
 same as before except now it's wrapped with flask
 and I hide my API keys in a config file. 
 If you want to run this, get your own API key 
-or just remove the script import
+and remove the config import or make your own
+config file
 
 V.1.1
 
