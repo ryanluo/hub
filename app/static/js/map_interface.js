@@ -20,23 +20,39 @@ var marker;
 // Allow global access to other locations.
 var others = {};
 
+// InitialContent contains the form we use to ask
+// users to register information to push to the database
 var initialContent = '<div id="new_user">' +
     'Team Name: <input type="text" id="teamName"><br>' + 
+    'Languages: ' +
+    '<select multiple id="languages">' +
+    '<option value="html">HTML</option>' + 
+    '<option value="css">CSS</option>' +
+    '<option value="python">Python</option>' +
+    '<option value="javascript">Javascript</option>' +
+    '<option value="php">"PHP"</option>' + 
+    '<option value="other">Other</option>' +
+    '</select>' + '<br>' +
+    'Team Members (comma delineated):' +
+    ' <input type="text" id="members"></input>' + '<br>' +
     '<button id="addTeam">Submit</button>' +
     '</div>';
 
 // InfoWindow to display when markers are clicked.
+// Initialized to initial content to display the user form.
 var infowindow = new google.maps.InfoWindow({
-  content: initialContent
+  content: initialContent,
+  maxHeight: 200,
+  maxWidth: 200
 });
 
 /*
  * When you click submit we set the team in the dictionary
  * of one of the teams to what we have from input.
  *
- * This binds when the window is open and ready for event binding.
+ * We also push information to the database.
  *
- * We also activate other markers upon a successful click.
+ * This binds when the window is open and ready for event binding.
  *
  * tldr; this updates the teams location
  */
@@ -47,25 +63,35 @@ google.maps.event.addListener(infowindow,'domready', function(){
       alert("Please enter a team name!");
       return;
     }
+
+    var languages = $('#languages').val();
+
+    var members = $('#members').val();
+    members = members.split(",");
+
+    // Find position of user
     var pos = {
       lat: marker.position.k,
       lng: marker.position.B
     }
     
     var data = {
+      languages: languages,
       loc: pos,
+      members: members,
       teamName: name
     }
 
     updateDatabase(data);
     infowindow.close();
+    others[name] = {}
     others[name].data = data;
     marker.content = formatContent(data);
     activateListener(marker, name);
   });
 });
 
-// Initialize stuff
+// Initialize map
 function initialize() {
   var mapOptions = {
     center: providence, 
@@ -119,7 +145,11 @@ function handleNoGeolocation(errorFlag) {
 /*
  * Display new team.
  * 
- * Returns a circle that is drawn on the map.
+ * Returns a point that is drawn on the map.
+ *
+ * Pass in a name which is the team name,
+ * the position on the map, and the map it's drawn on.
+ *
  */
 function drawOthers(name, pos, map) {
   var circle = {
@@ -139,12 +169,21 @@ function drawOthers(name, pos, map) {
   }));
 }
 
+/*
+ *
+ * "Activate" or add all infowindow click listeners
+ * for each drawn marker.
+ * 
+ */
 function activateListeners() {
   for (teamName in others) {
     activateListener(others[teamName].circle, teamName);
   }
 }
 
+/*
+ * Activate a particular drawn marker.
+ */
 function activateListener(object, teamName) {
   others[teamName]['listener'] =
     google.maps.event.addListener(object, 'click', function() {
@@ -155,10 +194,32 @@ function activateListener(object, teamName) {
     }); 
 }
 
+/*
+ * Given a marker's object representation, how
+ * should we display this information?
+ */
 function formatContent(teamData) {
+  var languages = "";
+  for (key in teamData.languages) {
+    languages += teamData.languages[key] + '<br>';
+  }
+  var members = "";
+  for (key in teamData.members) {
+    members += teamData.members[key] + '<br>';
+  }
   content = '<div id="' + teamData.teamName + '">' + 
-      'Team: ' + teamData.teamName + '<br>' + 
-      '<div id="teamContent"></div>' + 
+      '<strong>Team</strong>: ' +
+        teamData.teamName + '<br>' + 
+      '<div id="teamContent">' +
+        '<strong>Languages</strong>: ' +
+        '<div id="teamLanguages">' +
+          languages +
+        '</div>' + '<br>' +
+        '<strong>Members</strong>: ' +
+        '<div id="teamMembers">' +
+          members +
+        '</div>' +
+      '</div>' + 
       '</div>';
   return content;
 }
