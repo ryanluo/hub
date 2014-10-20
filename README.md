@@ -1,7 +1,7 @@
 V.1.3
 
 Functional. Icons replaced with circles for 
-other teams. Real time add. Not sure about realtime delete.
+other teams. Real time add and delete.
 
 
 V.1.2
