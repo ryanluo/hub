@@ -115,18 +115,20 @@ function handleNoGeolocation(errorFlag) {
  * Returns a circle that is drawn on the map.
  */
 function drawOthers(name, pos, map) {
-  var circleOpts = {
-    strokeColor: '#FF0000',
-    strokeOpacity: 0.8,
-    strokeWeight: 1,
-    fillColor: '#FF0000',
-    fillOpacity: 0.35,
-    map: map,
-    center: pos,
-    radius: 5,
+  var circle = {
+    path: google.maps.SymbolPath.CIRCLE,
+    fillColor: 'red',
+    fillOpacity: .4,
+    scale: 4.5,
+    strokeColor: 'black',
+    strokeWeight: 1
   }
   // Add the circle for this city to the map.
-  return (new google.maps.Circle(circleOpts));
+  return (new google.maps.Marker({
+    position: pos,
+    icon: circle,
+    map: map
+  }));
 }
 
 function activateListeners() {
