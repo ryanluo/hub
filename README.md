@@ -1,3 +1,6 @@
+V.1.4
+Added more fields per user
+
 V.1.3
 
 Functional. Icons replaced with circles for 
