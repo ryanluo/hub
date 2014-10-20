@@ -48,9 +48,6 @@ db.on('child_changed', function(snapshot) {
 
 /*
  * When a child is removed, we remove it from the map.
- *
- * <<<<untested>>>>
- *
  */
 db.on('child_removed', function(snapshot) {
   var team = snapshot.val();
