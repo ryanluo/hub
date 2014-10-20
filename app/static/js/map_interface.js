@@ -50,13 +50,12 @@ google.maps.event.addListener(infowindow,'domready', function(){
     updateDatabase({
       teamName: name,
       loc: {
-        x: marker.position.B,
-        y: marker.position.k
+        lat: marker.position.k,
+        lng: marker.position.B
       }
     });
     infowindow.close();
   });
-
 });
 
 // Initialize stuff
@@ -72,7 +71,7 @@ function initialize() {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = new google.maps.LatLng(position.coords.latitude,
                                        position.coords.longitude);
-      var loc = {loc: {x: pos.lng(), y: pos.lat()}}
+      var loc = {loc: {lat: pos.lat(), lng: pos.lng()}}
       marker = placeMarker(pos, false, map)
       infowindow.open(map, marker);
     }, function() {
@@ -124,14 +123,37 @@ function drawOthers(name, pos, map) {
     fillOpacity: 0.35,
     map: map,
     center: pos,
-    radius: 5
+    radius: 5,
   }
   // Add the circle for this city to the map.
   return (new google.maps.Circle(circleOpts));
 }
 
+function activateListeners() {
+  for (team in others) {
+    activateListener(others, team);
+  }
+}
 
+function activateListener(others, team) {
+    var circle = others[team].circle;
+    var data = others[team].data;
+    others[team]['listener'] =
+      google.maps.event.addListener(circle, 'click', function() {
+        infowindow.close();
+        infowindow.content = this.content
+        infowindow.open(this.getMap());
+        infowindow.setPosition(data.loc);
+      }); 
+}
 
+function formatContent(teamData) {
+  content = '<div id="' + teamData.teamName + '">' + 
+      'Team: ' + teamData.teamName + '<br>' + 
+      '<div id="teamContent"></div>' + 
+      '</div>';
+  return content;
+}
 
 // Draw map!
 google.maps.event.addDomListener(window, 'load', initialize);

@@ -29,10 +29,12 @@ window.onbeforeunload = function() {
 db.on('child_added', function(snapshot) {
   var team = snapshot.val();
   var loc  = team.loc
-  var pos = {lat: loc.y, lng: loc.x};
+  var pos = {lat: loc.lat, lng: loc.lng};
   var name = team.teamName;
   var circle = drawOthers(name, pos, map);
-  others[name] = {circle: circle, team: team};
+  circle.content = formatContent(team);
+  others[name] = {circle: circle, data: team};
+  activateListener(others, name);
 });
 
 /*
@@ -41,7 +43,7 @@ db.on('child_added', function(snapshot) {
 db.on('child_changed', function(snapshot) {
   var team = snapshot.val();
   var loc = team.loc;
-  var pos = {lat: loc.y, lng: loc.x};
+  var pos = {lat: loc.lat, lng: loc.lng};
 });
 
 /*
