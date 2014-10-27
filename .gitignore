@@ -3,3 +3,6 @@ config.py
 *.swp
 *.pyc
 .env
+bin/
+include/
+lib/
