@@ -2,10 +2,16 @@ from flask import flash, redirect, render_template, request, url_for
 from flask.ext.login import login_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app import app
+from app import app, models, login_manager
+
 import firebase
 from forms import LoginForm, RegisterForm
 
+@login_manager.user_loader
+def load_user(userid):
+    r = firebase.get('/users/' + userid + '.json')
+    print r
+    return models.User(userid, r[u'name'], r[u'email'], r[u'password'])
 
 @app.route('/')
 @app.route('/index')
@@ -14,16 +20,19 @@ def index():
     return render_template('index.html', form=form)
 
 
-@app.route('/login', methods=('POST'))
+@app.route('/login', methods=('GET','POST'))
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = firebase.get('/users' + form.email)
-        if user and check_password_hash(user.password, form.password):
-            login_user(form.email)
+        user = firebase.get('/users/' + form.username.data + '.json')
+        if user and check_password_hash(user[u'password'], form.password.data):
+            u = load_user(form.username.data)
+            print u
+            login_user(u)
             flash('Successfully logged in.')
             return redirect(request.args.get('next') or url_for('index'))
-
+        return "wrong username/pass"
+    return "form not validated"
 
 @app.route('/register', methods=('GET', 'POST'))
 def register():
@@ -37,7 +46,8 @@ def register():
             # passwords.
             'password': generate_password_hash(form.password.data)
         }
+        username = form.username.data
 
-        firebase.post('/users.json', user_data)
+        print firebase.put('/users/' + username+ '.json', user_data)
         return redirect(url_for('index'))
     return render_template('register.html', form=form)
