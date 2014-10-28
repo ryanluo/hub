@@ -4,6 +4,7 @@ from wtforms.validators import Required, Email, EqualTo
 
 
 class RegisterForm(Form):
+    username = TextField('Username', validators=[Required()])
     name = TextField('Name', validators=[Required()])
     email = TextField('Email', validators=[Email()])
     password = PasswordField('Password', validators=[Required()])
@@ -21,5 +22,5 @@ class RegisterForm(Form):
 
 
 class LoginForm(Form):
-    email = TextField('Email', validators=[Email()])
+    username = TextField('Username', validators=[Required()])
     password = PasswordField('Password', validators=[Required()])
