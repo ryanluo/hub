@@ -3,7 +3,7 @@
  */
 
 // Reference to database
-var db = new Firebase('https://hub-test.firebaseio.com')
+var db = new Firebase('https://hub-test.firebaseio.com/teams')
 
 // Reference to user
 var user;

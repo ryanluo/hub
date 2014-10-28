@@ -94,7 +94,7 @@ google.maps.event.addListener(infowindow,'domready', function(){
 // Initialize map
 function initialize() {
   var mapOptions = {
-    center: providence, 
+    center: claremont, 
     zoom: 15
   };
   map = new google.maps.Map(document.getElementById('map'),
@@ -104,6 +104,7 @@ function initialize() {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = new google.maps.LatLng(position.coords.latitude,
                                        position.coords.longitude);
+      mapOptions.center = pos;
       var loc = {loc: {lat: pos.lat(), lng: pos.lng()}}
       marker = placeMarker(pos, false, map)
       infowindow.open(map, marker);
@@ -114,6 +115,8 @@ function initialize() {
     // Browser doesn't support Geolocation
     handleNoGeolocation(false);
   }
+  map = new google.maps.Map(document.getElementById('map'),
+                            mapOptions);
 }
 
 /*
