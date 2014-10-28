@@ -1,21 +1,25 @@
-<html>
-<head>
-  <title>sup</title>
-  <script src='https://cdn.firebase.com/js/client/1.1.1/firebase.js'></script>
-  <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ config.MAPS_API_KEY }}"></script>
-  <style>
-    #map {
-      height: 70%;
-      width: 50%;
-    }
-  </style>
-</head>
-<body>
-  <h1> hubba </h1>
-  <h4> Please make sure you allow the browser to access your location or you won't see the map underneath </h4>
-  <div id="map"></div>
-  <script src='{{ url_for('static', filename='js/firebase_interface.js') }}'></script>
-  <script src='{{ url_for('static', filename='js/map_interface.js') }}'></script>
-</body>
-</html>
+{% extends "layout/base.html" %}
+{% from "layout/forms.html" import forms as form_field %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<form method="post" action="{{ url_for('login') }}">
+  {{ form.hidden_tag() }}
+  {{ form_field(form.email) }}
+  {{ form_field(form.password) }}
+  <input type="submit">Login</input>
+</form>
+<h1> hubba </h1>
+<h4> Please make sure you allow the browser to access your location or you won't see the map underneath </h4>
+<div id="map" style="height: 70%; width: 50%;"></div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src='https://cdn.firebase.com/js/client/1.1.1/firebase.js'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ config.MAPS_API_KEY }}"></script>
+<script src='{{ url_for('static', filename='js/firebase_interface.js') }}'></script>
+<script src='{{ url_for('static', filename='js/map_interface.js') }}'></script>
+{% endblock %}

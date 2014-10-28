@@ -18,3 +18,8 @@ class RegisterForm(Form):
 
         # TODO: Make sure that the user does not exist
         return True
+
+
+class LoginForm(Form):
+    email = TextField('Email', validators=[Email()])
+    password = PasswordField('Password', validators=[Required()])

@@ -1,17 +1,6 @@
-{% macro form_field(field) -%}
-  <div>
-    {{ field.label }}
-    {{ field }}
-    {% if field.errors %}
-      <ul class="errors">
-      {% for error in field.errors %}
-        <li>{{ error }}</li>
-      {% endfor %}
-      </ul>
-    {% endif %}
-  </div>
-{%- endmacro %}
+{% extends "layout/base.html" %}
 
+{% block content %}
 <form method="post" action="{{ url_for('register') }}">
   {{ form.hidden_tag() }}
   {{ form_field(form.name) }}
@@ -20,3 +9,4 @@
   {{ form_field(form.confirm) }}
   <input type="submit">
 </form>
+{% endblock %}
