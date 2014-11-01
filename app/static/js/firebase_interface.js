@@ -3,9 +3,10 @@
  */
 
 // Reference to database
-var DB = new Firebase('https://hub-test.firebaseio.com')
+var DB = new Firebase('https://hub-test.firebaseio.com');
 
-var db = DB.child("teams")
+var db = DB.child("teams");
+var users = DB.child("users");
 
 // Reference to user
 var user;
@@ -47,13 +48,17 @@ window.onbeforeunload = function() {
  */
 db.on('child_added', function(snapshot) {
   var team = snapshot.val();
-  var loc  = team.loc
+  var loc  = team.loc;
   var pos = {lat: loc.lat, lng: loc.lng};
   var name = team.teamName;
   var circle = drawOthers(name, pos, map);
-  circle.content = formatContent(team);
-  others[name] = {circle: circle, data: team};
-  activateListener(others[name].circle, name);
+  var userData;
+  users.child(name).once('value', function(dataSnapshot) {
+    userData = dataSnapshot;
+    circle.content = formatContent(team, userData.val());
+    others[name] = {circle: circle, data: team};
+    activateListener(others[name].circle, name);
+  });
 });
 
 /*
@@ -65,6 +70,7 @@ db.on('child_added', function(snapshot) {
  */
 db.on('child_changed', function(snapshot) {
   var team = snapshot.val();
+  console.log(team);
   var loc  = team.loc
   var pos = {lat: loc.lat, lng: loc.lng};
   var name = team.teamName;
@@ -90,7 +96,8 @@ db.on('child_removed', function(snapshot) {
 
 // Call this to add user to DB
 function addMe(teamname, LOC) {
-  teams.child(teamname).set(LOC);
+  var data = {loc: LOC, teamName: teamname};
+  teams.child(teamname).set(data);
 }
 
 // Call this to remove user from DB

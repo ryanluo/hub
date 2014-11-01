@@ -23,29 +23,10 @@ var marker;
 // Allow global access to other locations.
 var others = {};
 
-
-// InitialContent contains the form we use to ask
-// users to register information to push to the database
-var initialContent = '<div id="new_user">' +
-    'Team Name: <input type="text" id="teamName"><br>' + 
-    'Languages: ' +
-    '<select multiple id="languages">' +
-    '<option value="html">HTML</option>' + 
-    '<option value="css">CSS</option>' +
-    '<option value="python">Python</option>' +
-    '<option value="javascript">Javascript</option>' +
-    '<option value="php">"PHP"</option>' + 
-    '<option value="other">Other</option>' +
-    '</select>' + '<br>' +
-    'Team Members (comma delineated):' +
-    ' <input type="text" id="members"></input>' + '<br>' +
-    '<button id="addTeam">Submit</button>' +
-    '</div>';
-
 // InfoWindow to display when markers are clicked.
 // Initialized to initial content to display the user form.
 var infowindow = new google.maps.InfoWindow({
-  content: initialContent,
+  content: "",
   maxHeight: 200,
   maxWidth: 200
 });
@@ -110,9 +91,8 @@ function initialize() {
                                        position.coords.longitude);
       mapOptions.center = pos;
       var loc = {loc: {lat: pos.lat(), lng: pos.lng()}}
-      if (logged_in) addMe(teamname,loc); 
+      if (logged_in) addMe(teamname,loc.loc); 
       marker = placeMarker(pos, false, map)
-      infowindow.open(map, marker);
     }, function() {
       handleNoGeolocation(true);
     });
@@ -206,14 +186,14 @@ function activateListener(object, teamName) {
  * Given a marker's object representation, how
  * should we display this information?
  */
-function formatContent(teamData) {
+function formatContent(teamData,userData) {
   var languages = "";
-  for (key in teamData.languages) {
-    languages += teamData.languages[key] + '<br>';
+  for (key in userData.languages) {
+    languages += userData.languages[key] + '<br>';
   }
   var members = "";
-  for (key in teamData.members) {
-    members += teamData.members[key] + '<br>';
+  for (key in userData.names) {
+    members += userData.names[key] + '<br>';
   }
   content = '<div id="' + teamData.teamName + '">' + 
       '<strong>Team</strong>: ' +
