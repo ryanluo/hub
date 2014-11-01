@@ -1,7 +1,8 @@
 class User():
-  def __init__(self, username, name, email, password):
-    self.username = username
-    self.name = name
+  def __init__(self, teamname, names, languages, email, password):
+    self.teamname = teamname 
+    self.names = names
+    self.languages = languages
     self.email = email
     self.password = password
 
@@ -15,7 +16,7 @@ class User():
     return False
 
   def get_id(self):
-    return unicode(self.username)
+    return unicode(self.teamname)
 
   def __repr(self):
-    return '<User %u>' % (self.username)
+    return '<User %u>' % (self.teamname)
