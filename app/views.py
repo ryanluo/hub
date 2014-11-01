@@ -26,7 +26,7 @@ def index():
         logged_user=logged_user)
 
 
-@app.route('/login', methods=('GET','POST'))
+@app.route('/login', methods=['POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -34,17 +34,17 @@ def login():
         if user and check_password_hash(user[u'password'], form.password.data):
             u = load_user(form.teamname.data)
             login_user(u)
-            flash('Successfully logged in.')
+            flash('Successfully logged in.', 'success')
             return redirect(request.args.get('next') or url_for('index'))
         flash("Log in failed, invalid username/password combination") 
         return redirect(url_for('index'))
-    flash('Form not validated')
+    flash('Form not validated', 'danger')
     return redirect(url_for('index'))
 
 @app.route('/register', methods=('GET', 'POST'))
 def register():
     form = RegisterForm()
-    if form.validate():
+    if request.method == 'POST' and form.validate():
         user_data = {
             'names': form.names.data.split(","),
             'languages': form.languages.data,
