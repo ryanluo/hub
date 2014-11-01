@@ -1,11 +1,12 @@
 from flask.ext.wtf import Form
-from wtforms import TextField, PasswordField
+from wtforms import TextField, PasswordField, SelectMultipleField
 from wtforms.validators import Required, Email, EqualTo
 
 
 class RegisterForm(Form):
-    username = TextField('Username', validators=[Required()])
-    name = TextField('Name', validators=[Required()])
+    teamname = TextField('teamname', validators=[Required()])
+    names = TextField('Names', validators=[Required()])
+    languages = SelectMultipleField('Languages', validators=[], choices=[('python','Python'), ('html','HTML'), ('css','CSS'), ('php','"PHP"')])
     email = TextField('Email', validators=[Email()])
     password = PasswordField('Password', validators=[Required()])
     confirm = PasswordField(
@@ -22,5 +23,5 @@ class RegisterForm(Form):
 
 
 class LoginForm(Form):
-    username = TextField('Username', validators=[Required()])
+    teamname = TextField('teamname', validators=[Required()])
     password = PasswordField('Password', validators=[Required()])
