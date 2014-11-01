@@ -1,5 +1,4 @@
 {% extends "layout/base.html" %}
-{% from "layout/forms.html" import forms as form_field %}
 
 {% block title %}Home{% endblock %}
 
@@ -13,20 +12,6 @@
 <script src='https://cdn.firebase.com/js/client/1.1.1/firebase.js'></script>
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ config.MAPS_API_KEY }}"></script>
-
-<script>
-  var logged_in = false;
-{% if logged_in %}
-  logged_in = true; 
-  var teamname = "{{ logged_user.teamname}}";
-{% endif %}
-  $(document).ready(function() {
-    $('#logout').click(function() {
-      if (logged_in) deleteMe (teamname);
-    });
-  });
-</script>
-
 <script src='{{ url_for('static', filename='js/firebase_interface.js') }}'></script>
 <script src='{{ url_for('static', filename='js/map_interface.js') }}'></script>
 {% endblock %}

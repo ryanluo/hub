@@ -19,3 +19,7 @@ def put(url, data):
 
 def post(url, data):
     return requests.post(FIREBASE_URL + url, data=json.dumps(data)).json()
+
+
+def delete(url):
+    return requests.delete(FIREBASE_URL + url)

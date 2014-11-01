@@ -1,29 +1,32 @@
 from flask import flash, redirect, render_template, request, url_for
-from flask.ext.login import login_user, logout_user
+from flask.ext.login import current_user, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app import app, models, login_manager, logged_user
+from app import app, login_manager
 
 import firebase
 from forms import LoginForm, RegisterForm
+from models import User
+
 
 @login_manager.user_loader
 def load_user(userid):
     r = firebase.get('/users/' + userid + '.json')
-    global logged_user
-    logged_user = models.User(userid, r[u'names'], r[u'languages'], r[u'email'], r[u'password'])
-    return logged_user
+    return User(userid, r['names'], r['languages'], r['email'], r['password'])
+
+
+@app.context_processor
+def inject_user():
+    """Ensure that the user object and login form are available for all
+    templates."""
+    return dict(user=current_user, login_form=LoginForm())
+
 
 @app.route('/')
 @app.route('/index')
 def index():
     form = LoginForm()
-    logged_in = logged_user != None
-    return render_template(
-        'index.html',
-        form=form,
-        logged_in=logged_in,
-        logged_user=logged_user)
+    return render_template('index.html', login_form=form, user=current_user)
 
 
 @app.route('/login', methods=['POST'])
@@ -36,17 +39,18 @@ def login():
             login_user(u)
             flash('Successfully logged in.', 'success')
             return redirect(request.args.get('next') or url_for('index'))
-        flash("Log in failed, invalid username/password combination") 
+        flash('Invalid username or password.', 'danger')
         return redirect(url_for('index'))
-    flash('Form not validated', 'danger')
+    flash('Please enter a username and password.', 'danger')
     return redirect(url_for('index'))
 
-@app.route('/register', methods=('GET', 'POST'))
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
     if request.method == 'POST' and form.validate():
         user_data = {
-            'names': form.names.data.split(","),
+            'names': [name.strip() for name in form.names.data.split(",")],
             'languages': form.languages.data,
             'email': form.email.data,
             # We store a hash of the password instead of the actual password so
@@ -58,17 +62,17 @@ def register():
         ref = '/users/' + teamname + '.json'
 
         if firebase.get(ref):
-          flash('Error: Team already defined, registration failed.')
-          return redirect(url_for('index'))
+            flash('Team name already registered.', 'danger')
+            return redirect(url_for('index'))
 
         firebase.put(ref, user_data)
         return redirect(url_for('index'))
     return render_template('register.html', form=form)
 
-@app.route('/logout', methods=('GET','POST'))
+
+@app.route('/logout', methods=['POST'])
 def logout():
+    firebase.delete('/teams/' + current_user.teamname + '.json')
     logout_user()
-    flash('Logged out successfully.')
-    global logged_user
-    logged_user = None
+    flash('Logged out successfully.', 'success')
     return redirect('/')

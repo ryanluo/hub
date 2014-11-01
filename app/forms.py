@@ -6,7 +6,13 @@ from wtforms.validators import Required, Email, EqualTo
 class RegisterForm(Form):
     teamname = TextField('teamname', validators=[Required()])
     names = TextField('Names', validators=[Required()])
-    languages = SelectMultipleField('Languages', validators=[], choices=[('python','Python'), ('html','HTML'), ('css','CSS'), ('php','"PHP"')])
+    languages = SelectMultipleField('Languages', validators=[], choices=[
+        ('python', 'Python'),
+        ('java', 'Java'),
+        ('html', 'HTML'),
+        ('css', 'CSS'),
+        ('javascript', 'JavaScript'),
+        ('php', 'PHP')])
     email = TextField('Email', validators=[Email()])
     password = PasswordField('Password', validators=[Required()])
     confirm = PasswordField(
@@ -23,5 +29,5 @@ class RegisterForm(Form):
 
 
 class LoginForm(Form):
-    teamname = TextField('teamname', validators=[Required()])
+    teamname = TextField('Team Name', validators=[Required()])
     password = PasswordField('Password', validators=[Required()])

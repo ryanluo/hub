@@ -9,6 +9,7 @@
     {% endfor %}
     </ul>
   {% endif %}
+</div>
 {%- endmacro %}
 
 <html>
@@ -25,19 +26,23 @@
       <div class="navbar-header">
         <a class="navbar-brand" href="{{ url_for('index') }}">Hub</a>
       </div>
-      <div class="nav navbar-nav navbar-right">
-        {% if not logged_in %}
-          <form class="navbar-form" method="post" action="{{ url_for('login') }}">
-            {{ form.hidden_tag() }}
-            {{ form_field(form.teamname) }}
-            {{ form_field(form.password) }}
-            <input type="submit" value="Login" id="login"></input>
-          </form>
-          <a href='{{url_for('register')}}'>Register new team!</a>
-        {% else %}
-          <a href='{{url_for('logout')}}' id="logout">Log Out.</a>
-        {% endif %}
-      </div>
+      {% if not user.is_authenticated() %}
+      <form class="navbar-form navbar-right" method="post" action="{{ url_for('login') }}">
+        {{ login_form.hidden_tag() }}
+        {{ form_field(login_form.teamname) }}
+        {{ form_field(login_form.password) }}
+        <input type="submit" value="Log in"></input>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a class="navbar-link" href='{{ url_for('register') }}'>Register new team!</a>
+        </li>
+      </ul>
+      {% else %}
+      <form class="navbar-form navbar-right" method="post" action={{ url_for('logout') }}>
+        <input type="submit" value="Log out"></input>
+      </form>
+      {% endif %}
     </div>
   </nav>
   {% endblock %}
