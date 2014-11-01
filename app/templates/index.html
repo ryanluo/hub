@@ -6,7 +6,7 @@
 {% block content %}
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
-    <ul class=flashes>
+    <ul class="flashes">
       {% for category, message in messages %}
       <li class="{{ category }}">{{ message }}</li>
       {% endfor %}
@@ -18,12 +18,12 @@
   {{ form.hidden_tag() }}
   {{ form_field(form.teamname) }}
   {{ form_field(form.password) }}
-  <input type="submit" value="Login"></input>
+  <input type="submit" value="Login" id="login"></input>
 </form>
 {% endif %}
 <a href='{{url_for('register')}}'>Register new team!</a>
 {% if logged_in %}
-<a href='{{url_for('logout')}}'>Log Out.</a>
+<a href='{{url_for('logout')}}' id="logout">Log Out.</a>
 {% endif %}
 <h1> hubba </h1>
 <h4> Please make sure you allow the browser to access your location or you won't see the map underneath </h4>
@@ -35,6 +35,20 @@
 <script src='https://cdn.firebase.com/js/client/1.1.1/firebase.js'></script>
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ config.MAPS_API_KEY }}"></script>
+
+<script>
+  var logged_in = false;
+{% if logged_in %}
+  logged_in = true; 
+  var teamname = "{{ logged_user.teamname}}";
+{% endif %}
+  $(document).ready(function() {
+    $('#logout').click(function() {
+      if (logged_in) deleteMe (teamname);
+    });
+  });
+</script>
+
 <script src='{{ url_for('static', filename='js/firebase_interface.js') }}'></script>
 <script src='{{ url_for('static', filename='js/map_interface.js') }}'></script>
 {% endblock %}

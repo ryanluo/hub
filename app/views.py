@@ -19,7 +19,11 @@ def load_user(userid):
 def index():
     form = LoginForm()
     logged_in = logged_user != None
-    return render_template('index.html', form=form, logged_in=logged_in)
+    return render_template(
+        'index.html',
+        form=form,
+        logged_in=logged_in,
+        logged_user=logged_user)
 
 
 @app.route('/login', methods=('GET','POST'))

@@ -8,17 +8,21 @@
 // Where is claremont?
 var claremont = { lat: 34.100629, lng: -117.707591};
 
+// DB drawing reference
+var teams = DB.child("teams");
+
 // Where was I when I made this thing?
 var providence = { lat: 41.826777, lng: -71.402556};
 
 // Alow global access to canvas.
 var map;
 
-// Allow global access to my location.
+// Allow global access to my marker.
 var marker;
 
 // Allow global access to other locations.
 var others = {};
+
 
 // InitialContent contains the form we use to ask
 // users to register information to push to the database
@@ -73,18 +77,18 @@ google.maps.event.addListener(infowindow,'domready', function(){
     var pos = {
       lat: marker.position.k,
       lng: marker.position.B
-    }
+    };
     
     var data = {
       languages: languages,
       loc: pos,
       members: members,
       teamName: name
-    }
+    };
 
     updateDatabase(data);
     infowindow.close();
-    others[name] = {}
+    others[name] = {};
     others[name].data = data;
     marker.content = formatContent(data);
     activateListener(marker, name);
@@ -106,6 +110,7 @@ function initialize() {
                                        position.coords.longitude);
       mapOptions.center = pos;
       var loc = {loc: {lat: pos.lat(), lng: pos.lng()}}
+      if (logged_in) addMe(teamname,loc); 
       marker = placeMarker(pos, false, map)
       infowindow.open(map, marker);
     }, function() {
@@ -229,3 +234,6 @@ function formatContent(teamData) {
 
 // Draw map!
 google.maps.event.addDomListener(window, 'load', initialize);
+
+
+

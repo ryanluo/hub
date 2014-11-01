@@ -3,7 +3,9 @@
  */
 
 // Reference to database
-var db = new Firebase('https://hub-test.firebaseio.com/teams')
+var DB = new Firebase('https://hub-test.firebaseio.com')
+
+var db = DB.child("teams")
 
 // Reference to user
 var user;
@@ -26,7 +28,7 @@ function updateDatabase(pos) {
  * Update database on window close.
  */ 
 window.onbeforeunload = function() {
-  user.remove();
+  if(user) user.remove();
 }
 
 /*
@@ -63,8 +65,13 @@ db.on('child_added', function(snapshot) {
  */
 db.on('child_changed', function(snapshot) {
   var team = snapshot.val();
-  var loc = team.loc;
+  var loc  = team.loc
   var pos = {lat: loc.lat, lng: loc.lng};
+  var name = team.teamName;
+  var circle = drawOthers(name, pos, map);
+  circle.content = formatContent(team);
+  others[name] = {circle: circle, data: team};
+  activateListener(others[name].circle, name);
 });
 
 /*
@@ -80,3 +87,13 @@ db.on('child_removed', function(snapshot) {
   circle.setMap(null);
   others[name] = null;
 });
+
+// Call this to add user to DB
+function addMe(teamname, LOC) {
+  teams.child(teamname).set(LOC);
+}
+
+// Call this to remove user from DB
+function deleteMe(teamname) {
+  db.child(teamname).set(null); 
+}
