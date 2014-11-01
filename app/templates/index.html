@@ -4,12 +4,27 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class=flashes>
+      {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+{% if not logged_in %}
 <form method="post" action="{{ url_for('login') }}">
   {{ form.hidden_tag() }}
-  {{ form_field(form.username) }}
+  {{ form_field(form.teamname) }}
   {{ form_field(form.password) }}
-  <input type="submit">Login</input>
+  <input type="submit" value="Login"></input>
 </form>
+{% endif %}
+<a href='{{url_for('register')}}'>Register new team!</a>
+{% if logged_in %}
+<a href='{{url_for('logout')}}'>Log Out.</a>
+{% endif %}
 <h1> hubba </h1>
 <h4> Please make sure you allow the browser to access your location or you won't see the map underneath </h4>
 <div id="map" style="height: 70%; width: 50%;"></div>

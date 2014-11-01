@@ -3,11 +3,13 @@
 {% block content %}
 <form method="post" action="{{ url_for('register') }}">
   {{ form.hidden_tag() }}
-  {{ form_field(form.username) }}
-  {{ form_field(form.name) }}
+  {{ form_field(form.teamname) }}
+  Comma-delineated team members:
+  {{ form_field(form.names) }}
+  {{ form_field(form.languages) }}
   {{ form_field(form.email) }}
   {{ form_field(form.password) }}
   {{ form_field(form.confirm) }}
-  <input type="submit">
+  <input type="submit" value="register">
 </form>
 {% endblock %}
