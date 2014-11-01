@@ -8,5 +8,6 @@ import firebase
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+logged_user = None
 
 from app import views
