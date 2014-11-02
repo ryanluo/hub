@@ -45,6 +45,7 @@
       </ul>
       {% else %}
       <form class="navbar-form navbar-right" method="post" action={{ url_for('logout') }}>
+        <button class="btn btn-warning" type="submit">Help</button>
         <button class="btn btn-default" type="submit">Log Out</button>
       </form>
       {% endif %}
