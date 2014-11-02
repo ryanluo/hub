@@ -4,7 +4,7 @@ from wtforms.validators import Required, Email, EqualTo
 
 
 class RegisterForm(Form):
-    teamname = TextField('teamname', validators=[Required()])
+    teamname = TextField('Team Name', validators=[Required()])
     names = TextField('Names', validators=[Required()])
     languages = SelectMultipleField('Languages', validators=[], choices=[
         ('python', 'Python'),

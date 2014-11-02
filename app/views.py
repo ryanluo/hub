@@ -39,9 +39,9 @@ def login():
             login_user(u)
             flash('Successfully logged in.', 'success')
             return redirect(request.args.get('next') or url_for('index'))
-        flash('Invalid username or password.', 'danger')
+        flash('Invalid team name or password.', 'danger')
         return redirect(url_for('index'))
-    flash('Please enter a username and password.', 'danger')
+    flash('Please enter a team name and password.', 'danger')
     return redirect(url_for('index'))
 
 

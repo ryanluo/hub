@@ -1,7 +1,10 @@
-{% macro form_field(field) -%}
-<div class="form-group {% if field.errors %}has-error{% endif %}">
-  {{ field.label }}
-  {{ field }}
+{% macro form_field(field, help=None) -%}
+<div class="form-group{% if field.errors %} has-error{% endif %}">
+  {{ field.label(class_='control-label') }}
+  {{ field(class_='form-control') }}
+  {% if help %}
+  <span class="help-block">{{ help }}</span>
+  {% endif %}
   {% if field.errors %}
     <ul class="errors">
     {% for error in field.errors %}
@@ -11,13 +14,16 @@
   {% endif %}
 </div>
 {%- endmacro %}
-
+<!doctype html>
 <html>
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/alert.min.js"></script>
 <title>Hub | {% block title %}{% endblock %}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
   {% block navbar %}
@@ -31,16 +37,16 @@
         {{ login_form.hidden_tag() }}
         {{ form_field(login_form.teamname) }}
         {{ form_field(login_form.password) }}
-        <input type="submit" value="Log in"></input>
+        <button class="btn btn-primary" type="submit">Log In</button>
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a class="navbar-link" href='{{ url_for('register') }}'>Register new team!</a>
+          <a class="navbar-link" href='{{ url_for('register') }}'>Register New Team!</a>
         </li>
       </ul>
       {% else %}
       <form class="navbar-form navbar-right" method="post" action={{ url_for('logout') }}>
-        <input type="submit" value="Log out"></input>
+        <button class="btn btn-default" type="submit">Log Out</button>
       </form>
       {% endif %}
     </div>
@@ -48,7 +54,12 @@
   {% endblock %}
   <div class="container">
   {% for category, message in get_flashed_messages(with_categories=True) %}
-    <div class="alert alert-{{ category }}">{{ message }}</div>
+    <div class="alert alert-{{ category }} alert-dismissable" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span></button>
+    </div>
   {% endfor %}
   </div>
   <div class="container">
