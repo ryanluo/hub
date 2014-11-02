@@ -1,5 +1,8 @@
+import json
+
 from flask import flash, redirect, render_template, request, url_for
-from flask.ext.login import current_user, login_user, logout_user
+from flask.ext.login import (current_user, login_required, login_user,
+                             logout_user)
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app import app, login_manager
@@ -34,7 +37,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = firebase.get('/users/' + form.teamname.data + '.json')
-        if user and check_password_hash(user[u'password'], form.password.data):
+        if user and check_password_hash(user['password'], form.password.data):
             u = load_user(form.teamname.data)
             login_user(u)
             flash('Successfully logged in.', 'success')
@@ -70,7 +73,16 @@ def register():
     return render_template('register.html', form=form)
 
 
+@app.route('/team_data')
+@login_required
+def team_data():
+    return json.dumps({
+        'team_name': current_user.teamname,
+    })
+
+
 @app.route('/logout', methods=['POST'])
+@login_required
 def logout():
     firebase.delete('/teams/' + current_user.teamname + '.json')
     logout_user()

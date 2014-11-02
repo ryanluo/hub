@@ -8,9 +8,6 @@
 // Where is claremont?
 var claremont = { lat: 34.100629, lng: -117.707591};
 
-// DB drawing reference
-var teams = DB.child("teams");
-
 // Where was I when I made this thing?
 var providence = { lat: 41.826777, lng: -71.402556};
 
@@ -31,77 +28,14 @@ var infowindow = new google.maps.InfoWindow({
   maxWidth: 200
 });
 
-/*
- * When you click submit we set the team in the dictionary
- * of one of the teams to what we have from input.
- *
- * We also push information to the database.
- *
- * This binds when the window is open and ready for event binding.
- *
- * tldr; this updates the teams location
- */
-google.maps.event.addListener(infowindow,'domready', function(){
-  $('#addTeam').click(function (e) {
-    var name = $('#teamName').val();
-    if (name === "" || name === undefined) {
-      alert("Please enter a team name!");
-      return;
-    }
-
-    var languages = $('#languages').val();
-
-    var members = $('#members').val();
-    members = members.split(",");
-
-    // Find position of user
-    var pos = {
-      lat: marker.position.k,
-      lng: marker.position.B
-    };
-    
-    var data = {
-      languages: languages,
-      loc: pos,
-      members: members,
-      teamName: name
-    };
-
-    updateDatabase(data);
-    infowindow.close();
-    others[name] = {};
-    others[name].data = data;
-    marker.content = formatContent(data);
-    activateListener(marker, name);
-  });
-});
-
-// Initialize map
+// Initialize Google map
 function initialize() {
   var mapOptions = {
-    center: claremont, 
-    zoom: 15
+    center: claremont,
+    zoom: 15,
+    draggable: false,
   };
-  map = new google.maps.Map(document.getElementById('map'),
-                            mapOptions);
-  // Try HTML5 geolocation
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = new google.maps.LatLng(position.coords.latitude,
-                                       position.coords.longitude);
-      mapOptions.center = pos;
-      var loc = {loc: {lat: pos.lat(), lng: pos.lng()}}
-      if (logged_in) addMe(teamname,loc.loc); 
-      marker = placeMarker(pos, false, map)
-    }, function() {
-      handleNoGeolocation(true);
-    });
-  } else {
-    // Browser doesn't support Geolocation
-    handleNoGeolocation(false);
-  }
-  map = new google.maps.Map(document.getElementById('map'),
-                            mapOptions);
+  map = new google.maps.Map(document.getElementById('map'), mapOptions);
 }
 
 /*
@@ -110,13 +44,11 @@ function initialize() {
  * map is the canvas that we draw on.
  */
 function placeMarker(pos, drag, map) {
-  var marker = new google.maps.Marker({
+  return new google.maps.Marker({
       position: pos,
-      draggable: drag,
-      title:"Center!"
+      map: map,
+      title: "Center!"
   });
-  marker.setMap(map);
-  return marker;
 }
 
 /*
@@ -132,7 +64,7 @@ function handleNoGeolocation(errorFlag) {
 
 /*
  * Display new team.
- * 
+ *
  * Returns a point that is drawn on the map.
  *
  * Pass in a name which is the team name,
@@ -161,7 +93,7 @@ function drawOthers(name, pos, map) {
  *
  * "Activate" or add all infowindow click listeners
  * for each drawn marker.
- * 
+ *
  */
 function activateListeners() {
   for (teamName in others) {
@@ -179,14 +111,14 @@ function activateListener(object, teamName) {
       infowindow.content = this.content;
       infowindow.open(this.getMap());
       infowindow.setPosition(this.position);
-    }); 
+    });
 }
 
 /*
  * Given a marker's object representation, how
  * should we display this information?
  */
-function formatContent(teamData,userData) {
+function formatContent(teamData, userData) {
   var languages = "";
   for (key in userData.languages) {
     languages += userData.languages[key] + '<br>';
@@ -215,5 +147,28 @@ function formatContent(teamData,userData) {
 // Draw map!
 google.maps.event.addDomListener(window, 'load', initialize);
 
+$(document).ready(function() {
+    // Locate the user on the map.
+    // Try HTML5 geolocation
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function onSuccess(position) {
+        var pos = new google.maps.LatLng(position.coords.latitude,
+                                         position.coords.longitude);
 
+        // Place the big marker where the user is
+        placeMarker(pos, false, map);
 
+        // Request the user's team data from the server and add their location
+        // to the database.
+        $.getJSON('/team_data', function onSuccess(data) {
+            var loc = {lat: pos.lat(), lng: pos.lng()};
+            addMe(data.team_name, loc);
+        });
+    }, function onError() {
+      handleNoGeolocation(true);
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleNoGeolocation(false);
+  }
+});
