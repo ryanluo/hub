@@ -33,7 +33,7 @@ function initialize() {
   var mapOptions = {
     center: claremont,
     zoom: 15,
-    draggable: false,
+    draggable: true,
   };
   map = new google.maps.Map(document.getElementById('map'), mapOptions);
 }
