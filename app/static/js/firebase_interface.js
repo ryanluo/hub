@@ -61,8 +61,3 @@ function addMe(teamName, location) {
     var data = {loc: location, teamName: teamName};
     teams.child(teamName).set(data);
 }
-
-// Call this to remove a user's location from the DB
-function deleteMe(teamname) {
-    teams.child(teamname).set(null);
-}

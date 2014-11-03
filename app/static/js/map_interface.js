@@ -14,9 +14,6 @@ var providence = { lat: 41.826777, lng: -71.402556};
 // Alow global access to canvas.
 var map;
 
-// Allow global access to my marker.
-var marker;
-
 // Allow global access to other locations.
 var others = {};
 
@@ -40,14 +37,12 @@ function initialize() {
 
 /*
  * Places a marker at position pos.
- * drag sets the marker to be draggable or not
  * map is the canvas that we draw on.
  */
-function placeMarker(pos, drag, map) {
+function placeMarker(pos, map) {
   return new google.maps.Marker({
       position: pos,
       map: map,
-      title: "Center!"
   });
 }
 
@@ -90,19 +85,23 @@ function drawOthers(name, pos, map) {
 }
 
 /*
- *
  * "Activate" or add all infowindow click listeners
  * for each drawn marker.
  *
+ * Utility, not currently used.
+ * 
  */
 function activateListeners() {
   for (teamName in others) {
     activateListener(others[teamName].circle, teamName);
   }
-}
+};
 
 /*
  * Activate a particular drawn marker.
+ *
+ * This allows us to click on a team's marker and have an info window open.
+ *
  */
 function activateListener(object, teamName) {
   others[teamName]['listener'] =
@@ -112,7 +111,7 @@ function activateListener(object, teamName) {
       infowindow.open(this.getMap());
       infowindow.setPosition(this.position);
     });
-}
+};
 
 /*
  * Given a marker's object representation, how
@@ -156,7 +155,7 @@ $(document).ready(function() {
                                          position.coords.longitude);
 
         // Place the big marker where the user is
-        placeMarker(pos, false, map);
+        placeMarker(pos, map);
 
         // Request the user's team data from the server and add their location
         // to the database.
