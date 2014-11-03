@@ -58,7 +58,7 @@ teams.on('child_removed', function(snapshot) {
 
 // Call this to add a user's location to the DB
 function addMe(teamName, location) {
-    var data = {loc: location, teamName: teamName};
+    var data = {loc: location, teamName: teamName, needsHelp: false};
     teams.child(teamName).set(data);
 }
 

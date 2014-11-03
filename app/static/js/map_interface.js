@@ -144,8 +144,21 @@ function formatContent(teamData, userData) {
   return content;
 }
 
+function changeColor() {
+}
+
 // Draw map!
 google.maps.event.addDomListener(window, 'load', initialize);
+
+/*
+ * Respond to help button click.
+ *
+ */
+
+$('#help').click(function() {
+  alert($('#teamname').text());
+  teams.child($('#teamname').text()).child('needsHelp').set(true); 
+});
 
 $(document).ready(function() {
     // Locate the user on the map.
