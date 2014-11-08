@@ -33,7 +33,7 @@ teams.on('child_added', function(snapshot) {
     var pos = {lat: loc.lat, lng: loc.lng};
     var name = team.teamName;
     var help = team.needsHelp;
-    var circle = drawOthers(name, pos, map);
+    var circle = drawOthers(name, pos, map, help);
 
     users.child(name).once('value', function(dataSnapshot) {
         var userData = dataSnapshot;
