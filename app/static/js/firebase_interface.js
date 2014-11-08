@@ -32,6 +32,7 @@ teams.on('child_added', function(snapshot) {
     var loc  = team.loc;
     var pos = {lat: loc.lat, lng: loc.lng};
     var name = team.teamName;
+    var help = team.needsHelp;
     var circle = drawOthers(name, pos, map);
 
     users.child(name).once('value', function(dataSnapshot) {
@@ -40,6 +41,33 @@ teams.on('child_added', function(snapshot) {
         others[name] = {circle: circle, data: team};
         activateListener(others[name].circle, name);
     });
+});
+
+/*
+ * On child change, if team help flag is true, change color of
+ * marker.
+ *
+*/
+teams.on('child_changed', function(snapshot) {
+
+    var team = snapshot.val();
+    console.log(team);
+
+    if (team.needsHelp == true) {
+        var up = {
+         path: google.maps.SymbolPath.CIRCLE,
+         fillColor: 'blue',
+         fillOpacity: .4,
+         scale: 4.5,
+         strokeColor: 'black',
+         strokeWeight: 1
+        }
+
+        var marker = markers[0];
+        marker.setIcon(up);
+    } else {
+
+    }
 });
 
 /*
@@ -58,11 +86,11 @@ teams.on('child_removed', function(snapshot) {
 
 // Call this to add a user's location to the DB
 function addMe(teamName, location) {
-    var data = {loc: location, teamName: teamName, needsHelp: false};
+    var data = {loc: location, teamName: teamName, needsHelp:false};
     teams.child(teamName).set(data);
 }
 
-// Call this to remove a user's location from the DB
-function deleteMe(teamname) {
-    teams.child(teamname).set(null);
+
+function helpMe(teamname) {
+    teams.child(teamname).child('needsHelp').set(true);
 }

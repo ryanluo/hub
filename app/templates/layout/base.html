@@ -30,7 +30,6 @@
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="{{ url_for('index') }}">Hub</a>
-        <p id="user-welcome" class="navbar-text">Welcome Team <span id="teamname">{{ user.teamname }}</span></p>
       </div>
       {% if not user.is_authenticated() %}
       <form class="navbar-form navbar-right" method="post" action="{{ url_for('login') }}">
@@ -45,6 +44,7 @@
         </li>
       </ul>
       {% else %}
+      <p id="user-welcome" class="navbar-text">Welcome Team <span id="teamname">{{ user.teamname }}</span></p>
       <form class="navbar-form navbar-right" method="post" action={{ url_for('logout') }}>
         <button id="help" class="btn btn-danger" type="button">Help</button>
         <button class="btn btn-default" type="submit">Log Out</button>
