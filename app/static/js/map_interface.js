@@ -34,6 +34,20 @@ var infowindow = new google.maps.InfoWindow({
   maxWidth: 200
 });
 
+// return a circle icon with certain color
+function colorCircle(color)
+{
+  var circle = {
+    path: google.maps.SymbolPath.CIRCLE,
+    fillColor: color,
+    fillOpacity: .4,
+    scale: 4.5,
+    strokeColor: 'black',
+    strokeWeight: 1
+  }
+  return circle;
+}
+
 // Initialize Google map
 function initialize() {
   var mapOptions = {
@@ -78,23 +92,15 @@ function handleNoGeolocation(errorFlag) {
  */
 function drawOthers(name, pos, map, help) {
 
-  var color = 'red';
-  if (help == true) {
-    color = 'blue';
-  }
-
-  var circle = {
-    path: google.maps.SymbolPath.CIRCLE,
-    fillColor: color,
-    fillOpacity: .4,
-    scale: 4.5,
-    strokeColor: 'black',
-    strokeWeight: 1
+  if (help) {
+    var icon = colorCircle('blue');
+  } else {
+    var icon = colorCircle('red');
   }
 
   marker = new google.maps.Marker({
     position: pos,
-    icon: circle,
+    icon: icon,
     map: map
   });
 

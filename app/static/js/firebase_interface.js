@@ -51,22 +51,17 @@ teams.on('child_added', function(snapshot) {
 teams.on('child_changed', function(snapshot) {
 
     var team = snapshot.val();
-    console.log(team);
+    var name = team.teamName;
+    var currentMarker = others[name].circle
 
-    if (team.needsHelp == true) {
-        var up = {
-         path: google.maps.SymbolPath.CIRCLE,
-         fillColor: 'blue',
-         fillOpacity: .4,
-         scale: 4.5,
-         strokeColor: 'black',
-         strokeWeight: 1
+    if (team.needsHelp) {
+        if (currentMarker.getIcon().fillColor == 'red') {
+            currentMarker.setIcon(colorCircle('blue'));
         }
-
-        var marker = markers[0];
-        marker.setIcon(up);
     } else {
-
+        if (currentMarker.getIcon().fillColor == 'blue') {
+            currentMarker.setIcon(colorCircle('red'));
+        }
     }
 });
 
