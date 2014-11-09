@@ -70,7 +70,7 @@ computer. You're ready to go!
 
 ## Running the App
 
-Open a terminal or command prompt in the project root and run `python app.py`.
+Open a terminal or command prompt in the project root and run `python run.py`.
 You should see some messages about the server starting on `localhost:5000`.
 Open up a web browser, and enter `localhost:5000` in the address bar to view the
 app.
