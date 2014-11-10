@@ -73,3 +73,14 @@ Open up a web browser, and enter `localhost:5000` in the address bar to view the
 app.
 
 [Chocolatey]: http://chocolatey.org
+
+## While waiting for downloads:
+
+Make a firebase account! It's super easy. 
+www.firebase.com
+
+Make a github account! 
+www.github.com
+
+Get a Google Maps API key!
+www.code.google.com/apis/console/
