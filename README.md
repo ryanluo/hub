@@ -5,9 +5,6 @@ full-stack web application.
 
 ## Installation
 
-Clone the repository to your local machine, or click the `Download ZIP` button
-to the left to download the files and drag the folder to wherever you'd like.
-
 ### Mac & Linux
 
 Macs come with Python installed. Most Linux distros do as well.
