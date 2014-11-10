@@ -49,19 +49,14 @@ teams.on('child_added', function(snapshot) {
  *
 */
 teams.on('child_changed', function(snapshot) {
-
     var team = snapshot.val();
     var name = team.teamName;
     var currentMarker = others[name].circle
 
     if (team.needsHelp) {
-        if (currentMarker.getIcon().fillColor == 'red') {
-            currentMarker.setIcon(colorCircle('blue'));
-        }
+      currentMarker.setIcon(colorCircle('blue'));
     } else {
-        if (currentMarker.getIcon().fillColor == 'blue') {
-            currentMarker.setIcon(colorCircle('red'));
-        }
+      currentMarker.setIcon(colorCircle('red'));
     }
 });
 
@@ -86,5 +81,8 @@ function addMe(teamName, location) {
 }
 
 function helpMe(teamname) {
-    teams.child(teamname).child('needsHelp').set(true);
+    var helpField = teams.child(teamname).child('needsHelp');
+    helpField.once('value', function(snapshot) {
+      helpField.set(!snapshot.val());
+    });
 }

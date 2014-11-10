@@ -17,12 +17,6 @@ var map;
 // Allow global access to my marker.
 var marker;
 
-// Array of markers on map.
-var markers = [];
-
-// Index used to access
-var index = 0;
-
 // Allow global access to other locations.
 var others = {};
 
@@ -103,13 +97,7 @@ function drawOthers(name, pos, map, help) {
     map: map
   });
 
-  markers[index] = marker;
-  index++;
   return marker;
-}
-
-function update() {
-
 }
 
 /*
@@ -175,12 +163,14 @@ function formatContent(teamData, userData) {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 /*
- * Respond to help button click.
+ * Color team and toggle button when help button clicked.
  *
  */
 
-$('#help').click(function() {
+$('.btn.btn-danger.help').click(function() {
   helpMe($('#teamname').text());
+  $('.btn.btn-danger').toggle();
+
 });
 
 $(document).ready(function() {

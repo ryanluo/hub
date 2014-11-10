@@ -46,7 +46,8 @@
       {% else %}
       <p id="user-welcome" class="navbar-text">Welcome Team <span id="teamname">{{ user.teamname }}</span></p>
       <form class="navbar-form navbar-right" method="post" action={{ url_for('logout') }}>
-        <button id="help" class="btn btn-danger" type="button">Help</button>
+        <button id="help" class="btn btn-danger help" type="button">Help</button>
+        <button id="help" style="display: none" class="btn btn-danger help" type="button">Thanks!</button>
         <button class="btn btn-default" type="submit">Log Out</button>
       </form>
       {% endif %}
@@ -59,7 +60,7 @@
       {{ message }}
       <button type="button" class="close" data-dismiss="alert">
         <span aria-hidden="true">&times;</span>
-        <span class="sr-only">Close</spana></button>
+        <span class="sr-only">Close</span></button>
     </div>
   {% endfor %}
   </div>
