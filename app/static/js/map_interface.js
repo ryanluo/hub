@@ -14,6 +14,15 @@ var providence = { lat: 41.826777, lng: -71.402556};
 // Alow global access to canvas.
 var map;
 
+// Allow global access to my marker.
+var marker;
+
+// Array of markers on map.
+var markers = [];
+
+// Index used to access
+var index = 0;
+
 // Allow global access to other locations.
 var others = {};
 
@@ -24,6 +33,20 @@ var infowindow = new google.maps.InfoWindow({
   maxHeight: 200,
   maxWidth: 200
 });
+
+// return a circle icon with certain color
+function colorCircle(color)
+{
+  var circle = {
+    path: google.maps.SymbolPath.CIRCLE,
+    fillColor: color,
+    fillOpacity: .4,
+    scale: 4.5,
+    strokeColor: 'black',
+    strokeWeight: 1
+  }
+  return circle;
+}
 
 // Initialize Google map
 function initialize() {
@@ -42,7 +65,7 @@ function initialize() {
 function placeMarker(pos, map) {
   return new google.maps.Marker({
       position: pos,
-      map: map,
+      map: map
   });
 }
 
@@ -66,22 +89,27 @@ function handleNoGeolocation(errorFlag) {
  * the position on the map, and the map it's drawn on.
  *
  */
-function drawOthers(name, pos, map) {
-  var circle = {
-    path: google.maps.SymbolPath.CIRCLE,
-    fillColor: 'red',
-    fillOpacity: .4,
-    scale: 4.5,
-    strokeColor: 'black',
-    strokeWeight: 1
+function drawOthers(name, pos, map, help) {
+
+  if (help) {
+    var icon = colorCircle('blue');
+  } else {
+    var icon = colorCircle('red');
   }
 
-  // Add the circle for this city to the map.
-  return (new google.maps.Marker({
+  marker = new google.maps.Marker({
     position: pos,
-    icon: circle,
+    icon: icon,
     map: map
-  }));
+  });
+
+  markers[index] = marker;
+  index++;
+  return marker;
+}
+
+function update() {
+
 }
 
 /*
@@ -145,6 +173,15 @@ function formatContent(teamData, userData) {
 
 // Draw map!
 google.maps.event.addDomListener(window, 'load', initialize);
+
+/*
+ * Respond to help button click.
+ *
+ */
+
+$('#help').click(function() {
+  helpMe($('#teamname').text());
+});
 
 $(document).ready(function() {
     // Locate the user on the map.
