@@ -12,6 +12,10 @@ class RegisterForm(Form):
         ('html', 'HTML'),
         ('css', 'CSS'),
         ('javascript', 'JavaScript'),
+        ('ruby', 'Ruby'),
+        ('c++', 'C++'),
+        ('c', 'C (why?)'),
+        ('other', 'Other'),
         ('php', 'PHP')])
     email = TextField('Email', validators=[Email()])
     password = PasswordField('Password', validators=[Required()])
