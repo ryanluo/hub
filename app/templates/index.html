@@ -5,6 +5,18 @@
 {% block content %}
 <h4>Please allow the browser to access your location to see your team on the map below.</h4>
 <div id="map" style="height: 500px; width: 500px;"></div>
+<div id="chat" style="width: 700px; height: 300px; border: 1px solid #222;">
+	<div id="chatbox" style="height: 250px; overflow: scroll;">
+
+	
+	</div>
+
+	<div id="textbox" style="height: 50px; margin: 0px;">
+		<input id="chat_input" type="text" style="width:75%; height: 100%;" />
+		<input type="button" value="Send" style="width: 15%; height: 100%;" onclick="send_message();" />
+	</div>
+
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -14,4 +26,5 @@
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ config.MAPS_API_KEY }}"></script>
 <script src='{{ url_for('static', filename='js/firebase_interface.js') }}'></script>
 <script src='{{ url_for('static', filename='js/map_interface.js') }}'></script>
+<script src='{{ url_for('static', filename='js/chat.js') }}'></script>
 {% endblock %}
