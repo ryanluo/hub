@@ -5,9 +5,6 @@ full-stack web application.
 
 ## Installation
 
-Clone the repository to your local machine, or click the `Download ZIP` button
-to the left to download the files and drag the folder to wherever you'd like.
-
 ### Mac & Linux
 
 Macs come with Python installed. Most Linux distros do as well.
@@ -76,3 +73,14 @@ Open up a web browser, and enter `localhost:5000` in the address bar to view the
 app.
 
 [Chocolatey]: http://chocolatey.org
+
+## While waiting for downloads:
+
+Make a firebase account! It's super easy. 
+www.firebase.com
+
+Make a github account! 
+www.github.com
+
+Get a Google Maps API key!
+www.code.google.com/apis/console/
