@@ -16,6 +16,9 @@ class RegisterForm(Form):
         ('ruby', 'Ruby'),
         ('c++', 'C++'),
         ('c', 'C (why?)'),
+        ('objectivec', 'Objective C'),
+        ('android', 'Android'),
+        ('ios', 'iOS'),
         ('other', 'Other'),
         ('php', 'PHP')])
     email = TextField('Email', validators=[Email()])
