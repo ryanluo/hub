@@ -86,3 +86,39 @@ function helpMe(teamname) {
       helpField.set(!snapshot.val());
     });
 }
+
+// Query functions
+//
+//
+//
+
+function languageSelect(language) {
+  teams.once("value", function(snapshot) {
+    var data = snapshot.val();
+    users.once("value", function(shot) {
+      userData = shot.val();
+      for (var key in data) {
+        var isUsing = false;
+        for (var i = 0; i < userData[key].languages.length; i++) {
+          for (var j = 0; j < language.length; j++) {
+            if (userData[key].languages[i] === language[j]) {
+              isUsing = true;
+              break;
+            }
+          }
+
+        }
+        if (!isUsing) {
+          others[key].circle.setMap(null);
+        }
+      }
+    });
+  });
+  console.log(others);
+}
+
+function displayAll() {
+  for (var key in others) {
+    others[key].circle.setMap(map);
+  }
+}

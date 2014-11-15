@@ -29,7 +29,8 @@ def inject_user():
 @app.route('/index')
 def index():
     form = LoginForm()
-    return render_template('index.html', login_form=form, user=current_user)
+    register_form = RegisterForm()
+    return render_template('index.html', login_form=form, user=current_user, register_form = register_form)
 
 
 @app.route('/login', methods=['POST'])
@@ -54,6 +55,7 @@ def register():
     if request.method == 'POST' and form.validate():
         user_data = {
             'names': [name.strip() for name in form.names.data.split(",")],
+            'location': form.location.data,
             'languages': form.languages.data,
             'email': form.email.data,
             # We store a hash of the password instead of the actual password so

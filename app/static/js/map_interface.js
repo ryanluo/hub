@@ -134,10 +134,12 @@ function activateListener(object, teamName) {
  * should we display this information?
  */
 function formatContent(teamData, userData) {
+  console.log(userData)
   var languages = "";
   for (key in userData.languages) {
     languages += userData.languages[key] + '<br>';
   }
+  var location = userData.location;
   var members = "";
   for (key in userData.names) {
     members += userData.names[key] + '<br>';
@@ -145,6 +147,8 @@ function formatContent(teamData, userData) {
   content = '<div id="' + teamData.teamName + '">' + 
       '<strong>Team</strong>: ' +
         teamData.teamName + '<br>' + 
+      '<strong>Location: </strong>: ' +
+        userData.location + '<br>' + 
       '<div id="teamContent">' +
         '<strong>Languages</strong>: ' +
         '<div id="teamLanguages">' +
@@ -167,9 +171,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
  *
  */
 
-$('.btn.btn-danger.help').click(function() {
+$('.btn.help').click(function() {
   helpMe($('#teamname').text());
-  $('.btn.btn-danger').toggle();
+  $('.btn.help').toggle();
 
 });
 
@@ -197,4 +201,15 @@ $(document).ready(function() {
     // Browser doesn't support Geolocation
     handleNoGeolocation(false);
   }
+
+  $('.btn.filter').click(function(e) {
+    if($( this ).hasClass('select')) {
+      languageSelect($('#languages').val());
+    } else {
+      displayAll();
+    }  
+    $('.btn.filter').toggle();
+  });
 });
+
+

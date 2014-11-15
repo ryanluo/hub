@@ -1,21 +1,18 @@
 {% extends "layout/base.html" %}
-
-{% block title %}Home{% endblock %}
-
+{% block title %}Home{% endblock %} 
 {% block content %}
+<div>
 <h4>Please allow the browser to access your location to see your team on the map below.</h4>
+<div class="col-md-6">
 <div id="map" style="height: 500px; width: 500px;"></div>
-<div id="chat" style="width: 700px; height: 300px; border: 1px solid #222;">
-	<div id="chatbox" style="height: 250px; overflow: scroll;">
-
-	
-	</div>
-
-	<div id="textbox" style="height: 50px; margin: 0px;">
-		<input id="chat_input" type="text" style="width:75%; height: 100%;" />
-		<input type="button" value="Send" style="width: 15%; height: 100%;" onclick="send_message();" />
-	</div>
-
+</div>
+{% if user.is_authenticated() %}
+<div class="col-md-6">
+        {{ form_field(register_form.languages, help='Shift-click to select multiple values.') }}
+         <button id="lang" class="btn btn-default select filter" type="button">Filter  By</button>
+        <button id="lang" style="display: none" class="btn btn-success filter" type="button">Done!</button>
+{% endif %}
+       
 </div>
 {% endblock %}
 
